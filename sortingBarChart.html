@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    .bar {  }
+    
+  </style>
+</head>
+
+<body>
+  <button id="byKey"> Sort by Key</button>
+  <button id="byValue"> Sort by Value</button>
+  <br>
+  <script>
+
+    var data = [
+    {key:"2 Pac: Baby Don't Cry (Keep...", value:72},
+{key:"2Ge+her: The Hardest Part Of ...", value:87},
+{key:"3 Doors Down: Kryptonite", value:3},
+{key:"3 Doors Down: Loser", value:55},
+{key:"504 Boyz: Wobble Wobble", value:17},
+{key:"98^0: Give Me Just One Nig...", value:2},
+{key:"A*Teens: Dancing Queen", value:95},
+{key:"Aaliyah: I Don't Wanna", value:35},
+{key:"Aaliyah: Try Again", value:1},
+{key:"Adams, Yolanda: Open My Heart", value:57},
+{key:"Adkins, Trace: More", value:65},
+{key:"Aguilera, Christina: Come On Over Baby (A...", value:1},
+{key:"Aguilera, Christina: I Turn To You", value:3},
+{key:"Aguilera, Christina: What A Girl Wants", value:1},
+{key:"Alice Deejay: Better Off Alone", value:27},
+{key:"Allan, Gary: Smoke Rings In The D...", value:76},
+{key:"Amber: Sexual", value:42},
+{key:"Anastacia: I'm Outta Love", value:92},
+{key:"Anthony, Marc: My Baby You", value:70},
+{key:"Anthony, Marc: You Sang To Me", value:2},
+{key:"Avant: My First Love", value:26},
+{key:"Avant: Separated", value:23},
+{key:"BBMak: Back Here", value:13},
+{key:"Backstreet Boys, The: Shape Of My Heart", value:9},
+{key:"Backstreet Boys, The: Show Me The Meaning ...", value:6},
+{key:"Backstreet Boys, The: The One", value:30},
+{key:"Badu, Erkyah: Bag Lady", value:6},
+{key:"Baha Men: Who Let The Dogs Out", value:40},
+{key:"Barenaked Ladies: Pinch Me", value:15},
+{key:"Beenie Man: Girls Dem Sugar", value:54},
+{key:"Before Dark: Monica", value:77},
+{key:"Bega, Lou: Tricky Tricky", value:74},
+{key:"Big Punisher: It's So Hard", value:75},
+{key:"Black Rob: Whoa!", value:43},
+{key:"Black, Clint: Been There", value:44},
+{key:"Blaque: Bring It All To Me", value:5},
+{key:"Blige, Mary J.: Deep Inside", value:63},
+{key:"Blige, Mary J.: Give Me You", value:68},
+{key:"Blink-182: All The Small Things", value:6},
+{key:"Bloodhound Gang: The Bad Touch", value:52},
+{key:"Bon Jovi: It's My Life", value:33},
+{key:"Braxton, Toni: He Wasn't Man Enough", value:2},
+{key:"Braxton, Toni: Just Be A Man About ...", value:32},
+{key:"Braxton, Toni: Spanish Guitar", value:98},
+{key:"Brock, Chad: A Country Boy Can Su...", value:75},
+{key:"Brock, Chad: Yes!", value:22},
+{key:"Brooks & Dunn: You'll Always Be Lov...", value:55},
+{key:"Brooks, Garth: Do What You Gotta Do", value:69},
+{key:"Byrd, Tracy: Put Your Hand In Min...", value:76},
+{key:"Cagle, Chris: My Love Goes On And ...", value:76},
+{key:"Cam'ron: What Means The World...", value:83},
+{key:"Carey, Mariah: Crybaby", value:28},
+{key:"Carey, Mariah: Thank God I Found Yo...", value:1},
+{key:"Carter, Aaron: Aaron's Party (Come ...", value:35},
+{key:"Carter, Torrey: Take That", value:86},
+{key:"Changing Faces: That Other Woman", value:64},
+{key:"Chesney, Kenny: I Lost It", value:34},
+{key:"Chesney, Kenny: What I Need To Do", value:56},
+{key:"Clark Family Experience: Meanwhile Back At Th...", value:80},
+{key:"Clark, Terri: A Little Gasoline", value:75},
+{key:"Common: The Light", value:44},
+{key:"Counting Crows: Hanginaround", value:28},
+{key:"Creed: Higher", value:7},
+{key:"Creed: With Arms Wide Open", value:1},
+{key:"Cyrus, Billy Ray: You Won't Be Lonely ...", value:80},
+{key:"D'Angelo: Left & Right", value:70},
+{key:"D'Angelo: Untitled (How Does I...", value:25},
+{key:"DMX: Party Up (Up In Here...", value:27},
+{key:"DMX: What You Want", value:49},
+{key:"DMX: What's My Name", value:67},
+{key:"Da Brat: That's What I'm Look...", value:56},
+{key:"Da Brat: What'Chu Like", value:26},
+{key:"Davidson, Clay: Unconditional", value:49},
+{key:"De La Soul: All Good?", value:96},
+{key:"Destiny's Child: Independent Women Pa...", value:1},
+{key:"Destiny's Child: Jumpin' Jumpin'", value:3},
+{key:"Destiny's Child: Say My Name", value:1},
+{key:"Diffie, Joe: It's Always Somethin...", value:57},
+{key:"Diffie, Joe: The Quittin' Kind", value:90},
+{key:"Dion, Celine: That's The Way It Is", value:6},
+{key:"Dixie Chicks, The: Cold Day In July", value:65},
+{key:"Dixie Chicks, The: Cowboy Take Me Away", value:27},
+{key:"Dixie Chicks, The: Goodbye Earl", value:19},
+{key:"Dixie Chicks, The: Without You", value:31},
+{key:"Dr. Dre: Forgot About Dre", value:25},
+{key:"Dr. Dre: The Next Episode", value:23},
+{key:"Drama: Left, Right, Left", value:73},
+{key:"Dream: He Loves U Not", value:2},
+{key:"Eastsidaz, The: G'D Up", value:47},
+{key:"Eastsidaz, The: Got Beef", value:99},
+{key:"Eiffel 65: Blue", value:6},
+{key:"Elliott, Missy Misdemeanor: Hot Boyz", value:5},
+{key:"Eminem: Stan", value:51},
+{key:"Eminem: The Real Slim Shady", value:4},
+{key:"Eminem: The Way I Am", value:58},
+{key:"En Vogue: Riddle", value:92},
+{key:"Estefan, Gloria: No Me Dejes De Quere...", value:77},
+{key:"Evans, Sara: Born To Fly", value:34},
+{key:"Eve: Got It All", value:88},
+{key:"Eve: Love Is Blind", value:34},
+{key:"Everclear: Wonderful", value:11},
+{key:"Fabian, Lara: I Will Love Again", value:32},
+{key:"Fatboy Slim: The Rockafeller Skan...", value:76},
+{key:"Filter: Take A Picture", value:12},
+{key:"Foo Fighters: Learn To Fly", value:19},
+{key:"Fragma: Toca's Miracle", value:99},
+{key:"Funkmaster Flex: Do You", value:91},
+{key:"Ghostface Killah: Cherchez LaGhost", value:98},
+{key:"Gill, Vince: Feels Like Love", value:52},
+{key:"Gilman, Billy: One Voice", value:38},
+{key:"Ginuwine: None Of Ur Friends B...", value:48},
+{key:"Ginuwine: The Best Man I Can B...", value:77},
+{key:"Goo Goo Dolls: Broadway", value:24},
+{key:"Gray, Macy: I Try", value:5},
+{key:"Griggs, Andy: She's More", value:37},
+{key:"Guy: Dancin'", value:19},
+{key:"Hanson: This Time Around", value:20},
+{key:"Hart, Beth: L.A. Song", value:90},
+{key:"Heatherly, Eric: Flowers On The Wall", value:50},
+{key:"Henley, Don: Taking You Home", value:58},
+{key:"Herndon, Ty: No Mercy", value:92},
+{key:"Hill, Faith: Breathe", value:2},
+{key:"Hill, Faith: Let's Make Love", value:54},
+{key:"Hoku: Another Dumb Blonde", value:27},
+{key:"Hollister, Dave: Can't Stay", value:84},
+{key:"Hot Boys: I Need A Hot Girl", value:65},
+{key:"Houston, Whitney: Could I Have This Ki...", value:52},
+{key:"Houston, Whitney: I Learned From The B...", value:27},
+{key:"Houston, Whitney: My Love Is Your Love", value:4},
+{key:"Houston, Whitney: Same Script, Differe...", value:70},
+{key:"IMx: Stay The Night", value:23},
+{key:"Ice Cube: You Can Do It", value:35},
+{key:"Ideal: Whatever", value:47},
+{key:"Iglesias, Enrique: Be With You", value:1},
+{key:"Iglesias, Enrique: Rhythm Divine", value:32},
+{key:"J-Shin: One Night Stand", value:34},
+{key:"Ja Rule: Between Me And You", value:11},
+{key:"Jackson, Alan: It Must Be Love", value:37},
+{key:"Jackson, Alan: Pop A Top", value:43},
+{key:"Jackson, Alan: www.memory", value:45},
+{key:"Jagged Edge: He Can't Love U", value:15},
+{key:"Jagged Edge: Let's Get Married", value:11},
+{key:"Janet: Doesn't Really Matte...", value:1},
+{key:"Jay-Z: Anything", value:55},
+{key:"Jay-Z: Big Pimpin'", value:18},
+{key:"Jay-Z: Do It Again (Put Ya ...", value:65},
+{key:"Jay-Z: Hey Papi", value:76},
+{key:"Jay-Z: I Just Wanna Love U ...", value:11},
+{key:"Jean, Wyclef: 911", value:38},
+{key:"Joe: I Wanna Know", value:4},
+{key:"Joe: Treat Her Like A Lad...", value:63},
+{key:"John, Elton: Someday Out Of The B...", value:49},
+{key:"Jones, Donell: Where I Wanna Be", value:29},
+{key:"Jordan, Montell: Get It On.. Tonite", value:4},
+{key:"Juvenile: U Understand", value:83},
+{key:"Kandi: Don't Think I'm Not", value:24},
+{key:"Keith, Toby: Country Comes To Tow...", value:54},
+{key:"Keith, Toby: How Do You Like Me N...", value:31},
+{key:"Kelis: Caught Out There", value:54},
+{key:"Kenny G: Auld Lang Syne (The ...", value:7},
+{key:"Kid Rock: Only God Knows Why", value:19},
+{key:"Kravitz, Lenny: I Belong To You", value:71},
+{key:"Kumbia Kings: U Don't Love Me", value:62},
+{key:"LFO: I Don't Wanna Kiss Y...", value:61},
+{key:"LFO: West Side Story", value:84},
+{key:"LL Cool J: Imagine That", value:98},
+{key:"Larrieux, Amel: Get Up", value:97},
+{key:"Lawrence, Tracy: Lessons Learned", value:40},
+{key:"Levert, Gerald: Baby U Are", value:89},
+{key:"Levert, Gerald: Mr. Too Damn Good", value:76},
+{key:"Lil Bow Wow: Bounce With Me", value:20},
+{key:"Lil Wayne: Tha Block Is Hot", value:72},
+{key:"Lil' Kim: How Many Licks?", value:75},
+{key:"Lil' Kim: No Matter What They ...", value:60},
+{key:"Lil' Mo: Ta Da", value:95},
+{key:"Lil' Zane: Callin' Me", value:21},
+{key:"Limp Bizkit: N 2 Gether Now", value:73},
+{key:"Limp Bizkit: Re-Arranged", value:88},
+{key:"Limp Bizkit: Rollin'", value:65},
+{key:"Lonestar: Amazed", value:1},
+{key:"Lonestar: Smile", value:39},
+{key:"Lonestar: What About Now", value:30},
+{key:"Lopez, Jennifer: Feelin' Good", value:51},
+{key:"Loveless, Patty: That's The Kind Of M...", value:71},
+{key:"Lox: Ryde or Die, Chick", value:73},
+{key:"Lucy Pearl: Dance Tonight", value:36},
+{key:"Ludacris: What's Your Fantasy", value:21},
+{key:"M2M: Don't Say You Love M...", value:21},
+{key:"M2M: Mirror Mirror", value:62},
+{key:"Madison Avenue: Don't Call Me Baby", value:88},
+{key:"Madonna: American Pie", value:29},
+{key:"Madonna: Music", value:1},
+{key:"Martin, Ricky: Private Emotion", value:67},
+{key:"Martin, Ricky: Shake Your Bon-Bon", value:22},
+{key:"Martin, Ricky: She Bangs", value:12},
+{key:"Mary Mary: Shackles (Praise You...", value:28},
+{key:"Master P: Souljas", value:98},
+{key:"McBride, Martina: Love's The Only Hous...", value:42},
+{key:"McBride, Martina: There You Are", value:60},
+{key:"McEntire, Reba: I'll Be", value:51},
+{key:"McEntire, Reba: What Do You Say", value:31},
+{key:"McGraw, Tim: My Best Friend", value:29},
+{key:"McGraw, Tim: My Next Thirty Years", value:27},
+{key:"McGraw, Tim: Some Things Never Ch...", value:58},
+{key:"McKnight, Brian: Stay Or Let It Go", value:76},
+{key:"Messina, Jo Dee: Because You Love Me", value:53},
+{key:"Messina, Jo Dee: That's The Way", value:25},
+{key:"Metallica: I Disappear", value:76},
+{key:"Metallica: No Leaf Clover (Live...", value:74},
+{key:"Montgomery Gentry: Daddy Won't Sell The...", value:79},
+{key:"Montgomery, John Michael: The Little Girl", value:35},
+{key:"Moore, Chante: Straight Up", value:83},
+{key:"Moore, Mandy: I Wanna Be With You", value:24},
+{key:"Mumba, Samantha: Gotta Tell You", value:4},
+{key:"Musiq: Just Friends", value:31},
+{key:"Mya: Case Of The Ex (What...", value:2},
+{key:"Mya: The Best Of Me", value:50},
+{key:"Mystikal: Shake Ya Ass", value:13},
+{key:"N'Sync: Bye Bye Bye", value:4},
+{key:"N'Sync: It's Gonna Be Me", value:1},
+{key:"N'Sync: This I Promise You", value:5},
+{key:"Nas: You Owe Me", value:59},
+{key:"Nelly: (Hot S**t) Country G...", value:7},
+{key:"Next: Wifey", value:7},
+{key:"Nine Days: Absolutely (Story Of...", value:6},
+{key:"Nine Days: If I Am", value:68},
+{key:"No Doubt: Simple Kind Of Life", value:38},
+{key:"Nu Flavor: 3 Little Words", value:89},
+{key:"Offspring, The: Original Prankster", value:70},
+{key:"Paisley, Brad: Me Neither", value:85},
+{key:"Paisley, Brad: We Danced", value:29},
+{key:"Papa Roach: Last Resort", value:57},
+{key:"Pearl Jam: Nothing As It Seems", value:49},
+{key:"Pink: Most Girls", value:4},
+{key:"Pink: There U Go", value:7},
+{key:"Price, Kelly: As We Lay", value:64},
+{key:"Price, Kelly: Love Sets You Free", value:91},
+{key:"Price, Kelly: You Should've Told M...", value:64},
+{key:"Profyle: Liar", value:14},
+{key:"Puff Daddy: Best Friend", value:59},
+{key:"Q-Tip: Breathe And Stop", value:71},
+{key:"R.E.M.: The Great Beyond", value:57},
+{key:"Rascal Flatts: Prayin' For Daylight", value:38},
+{key:"Raye, Collin: Couldn't Last A Mome...", value:43},
+{key:"Red Hot Chili Peppers: Californication", value:69},
+{key:"Red Hot Chili Peppers: Otherside", value:14},
+{key:"Rimes, LeAnn: Big Deal", value:23},
+{key:"Rimes, LeAnn: Can't Fight The Moon...", value:71},
+{key:"Rimes, LeAnn: I Need You", value:11},
+{key:"Rogers, Kenny: Buy Me A Rose", value:40},
+{key:"Ruff Endz: No More", value:5},
+{key:"Sammie: I Like It", value:24},
+{key:"Santana: Maria, Maria", value:1},
+{key:"Savage Garden: Crash And Burn", value:24},
+{key:"Savage Garden: I Knew I Loved You", value:1},
+{key:"SheDaisy: Deck The Halls", value:61},
+{key:"SheDaisy: I Will.. But", value:43},
+{key:"SheDaisy: This Woman Needs", value:57},
+{key:"Sheist, Shade: Where I Wanna Be", value:95},
+{key:"Shyne: Bad Boyz", value:57},
+{key:"Simpson, Jessica: I Think I'm In Love ...", value:21},
+{key:"Simpson, Jessica: Where You Are", value:62},
+{key:"Sisqo: Got To Get It", value:40},
+{key:"Sisqo: Incomplete", value:1},
+{key:"Sisqo: Thong Song", value:3},
+{key:"Sister Hazel: Change Your Mind", value:59},
+{key:"Smash Mouth: Then The Morning Com...", value:11},
+{key:"Smith, Will: Freakin' It", value:99},
+{key:"Son By Four: A Puro Dolor (Purest...", value:26},
+{key:"Sonique: It Feels So Good", value:8},
+{key:"SoulDecision: Faded", value:22},
+{key:"Spears, Britney: From The Bottom Of M...", value:14},
+{key:"Spears, Britney: Lucky", value:23},
+{key:"Spears, Britney: Oops!.. I Did It Aga...", value:9},
+{key:"Spencer, Tracie: Still In My Heart", value:88},
+{key:"Splender: I Think God Can Expl...", value:62},
+{key:"Sting: Desert Rose", value:17},
+{key:"Stone Temple Pilots: Sour Girl", value:78},
+{key:"Stone, Angie: No More Rain (In Thi...", value:56},
+{key:"Strait, George: Go On", value:40},
+{key:"Strait, George: The Best Day", value:31},
+{key:"Sugar Ray: Falls Apart", value:29},
+{key:"TLC: Dear Lie", value:51},
+{key:"Tamar: If You Don't Wanna L...", value:89},
+{key:"Tamia: Can't Go For That", value:84},
+{key:"Third Eye Blind: Deep Inside Of You", value:69},
+{key:"Third Eye Blind: Never Let You Go", value:14},
+{key:"Thomas, Carl: Emotional", value:47},
+{key:"Thomas, Carl: I Wish", value:20},
+{key:"Thomas, Carl: Summer Rain", value:80},
+{key:"Tippin, Aaron: Kiss This", value:42},
+{key:"Train: Meet Virginia", value:20},
+{key:"Trick Daddy: Shut Up", value:83},
+{key:"Trina: Pull Over", value:93},
+{key:"Tritt, Travis: Best Of Intentions", value:27},
+{key:"Tuesday: I Know", value:98},
+{key:"Urban, Keith: Your Everything", value:51},
+{key:"Usher: Pop Ya Collar", value:60},
+{key:"Vassar, Phil: Carlene", value:45},
+{key:"Vassar, Phil: Just Another Day In ...", value:35},
+{key:"Vertical Horizon: Everything You Want", value:1},
+{key:"Vertical Horizon: You're A God", value:23},
+{key:"Vitamin C: Graduation (Friends ...", value:38},
+{key:"Vitamin C: The Itch", value:45},
+{key:"Walker, Clay: Live, Laugh, Love", value:74},
+{key:"Walker, Clay: The Chain Of Love", value:40},
+{key:"Wallflowers, The: Sleepwalker", value:73},
+{key:"Westlife: Swear It Again", value:20},
+{key:"Williams, Robbie: Angels", value:53},
+{key:"Wills, Mark: Back At One", value:36},
+{key:"Worley, Darryl: When You Need My Lov...", value:75},
+{key:"Wright, Chely: It Was", value:64},
+{key:"Yankee Grey: Another Nine Minutes", value:74},
+{key:"Yearwood, Trisha: Real Live Woman", value:81},
+{key:"Ying Yang Twins: Whistle While You Tw...", value:74},
+{key:"Zombie Nation: Kernkraft 400", value:99},
+{key:"matchbox twenty: Bent", value:1}
+
+];
+    
+var w = 1800;
+var h = 500;
+var margin = {
+    top: 50,
+    bottom: 100,
+    left: 30,
+    right: 20
+};
+var width = w - margin.left - margin.right;
+var height = h - margin.top - margin.bottom;
+    
+var x = d3.scaleBand()
+        .domain(data.map(function(d){
+            return d.key;
+        }))
+        .range([margin.left, width])
+    		.padding(0.1);
+    
+var y = d3.scaleLinear()
+        .domain([0, d3.max(data, function(d){
+            return d.value;
+        })])
+				.range([margin.top, height])
+
+var yAxis = d3.axisLeft().scale(y)
+        
+
+var svg = d3.select("body").append("svg")
+            .attr("id", "chart")
+            .call(d3.zoom().on("zoom", function () {
+              svg.attr("transform", d3.event.transform)
+      }))
+            .attr("width", w)
+            .attr("height", h);
+    				
+						svg.append("g")
+						.attr("class","axis")
+						.attr("transform","translate(" + margin.left + ",0)")
+						.call(yAxis);
+         
+
+    svg.selectAll("rect")
+        .data(data)
+        .enter()
+            .append("rect")
+   					.attr("class","bar")
+       			.on("mouseover",function(){
+      				d3.select(this)
+              	.attr("fill","red")
+    				}) 				
+    				.on("mouseout",function(){
+      				d3.select(this)
+              	.transition("colorfade")
+								.duration(250)
+    						.attr("fill",function(d){
+      						return "rgb(" + Math.round(d.value*2) + "," 
+                + Math.round(d.value*2) + "," + Math.round(d.value*2) + ")";})
+    				}) 
+    
+    				.attr("fill",function(d){
+      				return "rgb(" + Math.round(d.value*2) + "," 
+                + Math.round(d.value*2) + "," + Math.round(d.value*2) + ")";})
+    				    
+            .attr("x", function(d,i){
+               return x(d.key);
+            })
+    				.attr("width", x.bandwidth())    
+    				.attr("y", height)   				
+    				
+						.transition("bars")
+						.delay(function(d, i) {
+							return i * 50;
+						})
+						.duration(1000)
+    
+     			  .attr("y", function(d,i){
+               return y(d.value);
+            })   				
+            .attr("height", function(d,i){
+      				return height-y(d.value);
+    				})  
+        				
+
+   svg.selectAll("rect") 			
+    				.append("title")
+			   		.text(function(d) {
+			   			return d.key + ": " + d.value;
+			   		})
+   
+
+
+    svg.selectAll(".val-label")
+        .data(data)
+        .enter()
+            .append("text")
+            .style("font-size", "6px")
+            .classed("val-label", true)
+
+            .attr("x", function(d,i){
+                return x(d.key) + x.bandwidth()/2;
+            })
+    				.attr("y", height)   				
+    				
+						.transition("label")
+						.delay(function(d, i) {
+							return i * 50;  // gives it a smoother effect
+						})
+						.duration(1000)
+    
+     			  .attr("y", function(d,i){
+                return y(d.value) - 4;
+            })
+    				.attr("text-anchor","middle")
+    				.text(function(d){return d.value});
+  
+  	svg.selectAll(".bar-label")
+            .data(data)
+        		.enter()
+            .append("text")
+            .style("font-size", "6px")
+            .classed("bar-label", true)
+    
+						.attr("transform",function(d,i){
+      				return "translate(" + (x(d.key) + x.bandwidth()/2 - 8 ) + "," + (height+15) + ")" 
+              	+ " rotate(45)" })
+    				 
+      			.attr("text-anchor","left")
+    				.text(function(d){return d.key})
+    
+    d3.select("#byKey").on("click", function() {
+  data.sort(function(a, b) {
+    return d3.ascending(a.key, b.key)
+  })
+  x.domain(data.map(function(d) {
+    return d.key;
+  }));
+  svg.selectAll(".bar")
+    .transition()
+    .duration(500)
+    .attr("x", function(d, i) {
+      return x(d.key);
+    })
+
+  svg.selectAll(".val-label")
+    .transition()
+    .duration(500)
+    .style("font-size", "6px")
+    .attr("x", function(d, i) {
+      return x(d.key) + x.bandwidth() / 2;
+    })
+
+  svg.selectAll(".bar-label")
+    .transition()
+    .duration(500)
+    //added
+    .style("font-size", "6px")
+    .attr("transform", function(d, i) {
+      return "translate(" + (x(d.key) + x.bandwidth() / 2 - 8) + "," + (height + 15) + ")" + " rotate(45)"
+    })
+
+})
+
+d3.select("#byValue").on("click", function() {
+  data.sort(function(a, b) {
+    return d3.descending(a.value, b.value)
+  })
+  x.domain(data.map(function(d) {
+    return d.key;
+  }));
+  svg.selectAll(".bar")
+    .transition()
+    .duration(500)
+    .attr("x", function(d, i) {
+      return x(d.key);
+    })
+
+  svg.selectAll(".val-label")
+    .transition()
+    .duration(500)
+    .attr("x", function(d, i) {
+      return x(d.key) + x.bandwidth() / 2;
+    })
+
+  svg.selectAll(".bar-label")
+    .transition()
+    .duration(500)
+    .attr("transform", function(d, i) {
+      return "translate(" + (x(d.key) + x.bandwidth() / 2 - 8) + "," + (height + 15) + ")" + " rotate(45)"
+    })
+})
+
+
+
+  </script>
+</body>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div>
+<select id = "selectButton"></select>
+</div>
+<div id="my_dataviz"></div>
+<div id = "div_template"></div>
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 90, left: 60},
+    width = 1500 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .call(d3.zoom().on("zoom", function () {
+              svg.attr("transform", d3.event.transform)
+      }))
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+  
+
+// Parse the Data
+d3.csv("/billboard3.csv", function(data) {
+
+var grps = ["wk1", "wk2", "wk3","wk4","wk5", "wk6", "wk7","wk8","wk9", "wk10", "wk11","wk12","wk13", "wk14", "wk15","wk16","wk17","wk18","wk19","wk20","wk21", "wk22","wk23","wk24", "wk25", "wk26","wk27","wk28", "wk29", "wk30","wk31","wk32","wk33","wk33","wk34",    "wk35", "wk36","wk37","wk38", "wk39", "wk40","wk41","wk42", "wk43", "wk44","wk45","wk46","wk47","wk48","wk49","wk50","wk51","wk52","wk53","wk54","wk55","wk56","wk57","wk58","wk59"
+    ,"wk60","wk61","wk62","wk63","wk64","wk65","wk66","wk67","wk68","wk69","wk70","wk71","wk72","wk73","wk74","wk75","wk76"]      
+d3.select("#selectButton")
+    .selectAll('myOptions')
+        .data(grps)
+        .enter()
+        .append('option')
+        .text(function (d) {return d;})
+        .attr("value", function (d) { return d;})
+
+
+
+        // X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .domain(data.map(function(d) { return d.track; }))
+  .padding(1);
+svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x))
+  .selectAll("text")
+    .attr("transform", "translate(-10,0)rotate(-90)")
+    .style("text-anchor", "end")
+    .style("font-size", "6px");
+
+    // Add Y axis
+var y = d3.scaleLinear()
+  .domain([100, 0])
+  .range([ height, 0]);
+svg.append("g")
+  .call(d3.axisLeft(y));
+
+// Lines
+var line = svg.selectAll("myline")
+  .data(data)
+  .enter()
+  .append("line")
+    .attr("x1", function(d) { return x(d.track); })
+    .attr("x2", function(d) { return x(d.track); })
+    .attr("y1", function(d) { return y(d.wk1); })
+    .attr("y2", y(0))
+    .attr("stroke", "none")
+
+function make_x_gridlines() {		
+return d3.axisBottom(x)
+    .ticks(5)
+}
+
+// gridlines in y axis function
+function make_y_gridlines() {		
+    return d3.axisLeft(y)
+        .ticks(5)
+}
+
+// add the X gridlines
+svg.append("g")			
+    .attr("class", "grid")
+    .style("opacity", 0.3)
+    .attr("transform", "translate(0," + height + ")")
+    .call(make_x_gridlines()
+        .tickSize(-height)
+        .tickFormat("")
+    )
+
+// add the Y gridlines
+svg.append("g")			
+    .attr("class", "grid")
+    
+    .call(make_y_gridlines()
+        .tickSize(-width)
+        .tickFormat("")
+    )
+
+
+// Circles
+var dot = svg.selectAll("mycircle")
+  .data(data)
+  .enter()
+  .append("circle")
+    .attr("cx", function(d) { return x(d.track); })
+    .attr("cy", function(d) { return y(d.wk1); })
+    .attr("r", "4")
+    .style("fill", "blue")
+    .attr("stroke", "black")
+
+
+function update(selectedGroup) {
+    var dataFilter = data.map(function(d){return {artist: d.artist, track:d.track, date:d.date,wk1:d[selectedGroup]} })
+
+    line
+        .data(dataFilter)
+        .transition()
+        .duration(1000)
+        .attr("x1", function(d) { return x(d.track); })
+        .attr("x2", function(d) { return x(d.track); })
+        .attr("y1", function(d) { return y(d.wk1); })
+        .attr("y2", y(0))
+        
+    dot
+        .data(dataFilter)
+        .transition()
+        .duration(1000)
+            .attr("cx", function(d) { return x(d.track) })
+            .attr("cy", function(d) { return y(+d.wk1) })
+        
+        }
+    d3.select("#selectButton").on("change", function(d) {
+        var selectedOption = d3.select(this).node().value
+        update(selectedOption)
+    })
+    
+ 
+    
+})
+
+
+
+</script>
